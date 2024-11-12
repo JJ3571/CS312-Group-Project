@@ -1,0 +1,150 @@
+/* General Styles */
+body {
+  font-family: sans-serif;
+  background-color: #222; 
+  color: #eee; 
+  margin: 25px;
+  padding: 0;
+}
+
+header {
+  background-color: #333;
+  padding: 20px;
+  text-align: left;
+}
+
+h1 {
+  color: #3195ff; 
+  margin-bottom: 10px;
+}
+
+
+main {
+  padding: 20px;
+}
+
+article {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 10px; 
+}
+
+h2 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+footer {
+  background-color: #333;
+  padding: 10px;
+  text-align: center;
+}
+
+form {
+  width: 98%;
+  margin: 20px 0;
+}
+
+.form-group {
+  display: flex;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #333;
+  color: #eee;
+}
+
+input, select {
+  flex: 1;
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+}
+
+button,select {
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 3px;
+  border: none;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Post specific styling! */
+.post {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.post h2 {
+  margin-top: 0;
+}
+
+.post .category {
+  font-style: italic;
+  margin-left: 10px;
+}
+
+.post .date {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 5px;
+}
+
+.blog-post {
+  border: 1px solid #ccc; 
+  padding: 20px;          
+  margin-bottom: 20px;    
+  border-radius: 10px;    
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+  background-color: #363636; 
+}
+
+/* Styles for links */
+.btn {
+  cursor: pointer;
+  border-radius: 3px;
+  border: none;
+  display: inline-block;
+  padding: 10px 20px;
+  margin-left: 10px;
+  text-decoration: none;
+  color: white;
+  background-color: #007bff;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.btn-link:hover {
+  background-color: #0056b3;
+}
+
+/* Card styles */
+.card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  margin: 0 0 10px 0;
+}
+
+.card-text {
+  margin: 0 0 10px 0;
+}

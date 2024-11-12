@@ -1,34 +1,32 @@
 {
-  "name": "cs-312-group-project",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "Group project for music streaming app.",
-  "main": "server.js",
+  "description": "backend server to run express and manage database calls",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.4"
   },
+  "type": "module",
   "dependencies": {
-    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
-    "express": "^4.21.1",
+    "express": "^4.21.0",
     "express-session": "^1.18.1",
+    "lucide-react": "^0.439.0",
     "morgan": "^1.10.0",
-    "pg": "^8.13.1"
-  },
-  "directories": {
-    "lib": "lib"
-  },
-  "type": "module"
+    "pg": "^8.13.1",
+    "session": "^0.1.0"
+  }
 }
