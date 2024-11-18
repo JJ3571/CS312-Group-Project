@@ -157,6 +157,47 @@ app.get('/api/music', isAuthenticated, async (req, res) => {
   }
 });
 
+// Create new playlist
+app.post('/api/playlists', isAuthenticated, async (req, res) => {
+  const { playlistName } = req.body;
+  const userId = req.session.userId;
+
+  try {
+    const result = await pool.query(
+      "INSERT INTO playlists (user_id, playlist_name) VALUES ($1, $2) RETURNING *",
+      [userId, playlistName]
+    );
+    res.json({ success: true, playlist: result.rows[0] });
+  } catch (err) {
+    console.error('Error creating playlist:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// Add a song to playlist
+app.post('/api/playlists/:playlistId/songs', isAuthenticated, async (req, res) => {
+  const { playlistId } = req.params;
+  const { songId } = req.body;
+
+  try {
+    // Fetch current highest song order for user's playlist
+    const maxOrderResult = await pool.query(
+      "SELECT COALESCE(MAX(song_order), 0) AS max_song_order FROM playlist_songs WHERE playlist_id = $1",
+      [playlistId]
+    );
+    const maxSongOrder = maxOrderResult.rows[0].max_song_order;
+
+    // Insert the new song with song_order set to max_song_order + 1
+    const result = await pool.query(
+      "INSERT INTO playlist_songs (playlist_id, song_id, song_order) VALUES ($1, $2, $3) RETURNING *",
+      [playlistId, songId, maxSongOrder + 1]
+    );
+    res.json({ success: true, playlistSong: result.rows[0] });
+  } catch (err) {
+    console.error('Error adding song to playlist:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
 
 // Start server
 app.listen(port, () => {
