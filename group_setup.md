@@ -21,32 +21,72 @@ Here are some script templates we can use to ensure we all have the same table r
 ---
 
 ```pgsql
--- Uncomment after initial table creation!
+------------ CREATE TABLES ------------
+-- Uncomment DROP commands after initial table creation!
 -- DROP TABLE users;
-
 CREATE TABLE users (
-    user_id VARCHAR(255) PRIMARY KEY,
-    user_email VARCHAR(255) UNIQUE,
-    first_name VARCHAR(255),
-    password VARCHAR(255)
+    user_id SERIAL PRIMARY KEY,
+    user_email TEXT UNIQUE NOT NULL,
+    full_name TEXT,
+    password TEXT NOT NULL 
 );
 
-INSERT INTO users (user_id, first_name, user_email, password) VALUES
-('Alice_FTW', 'Alice Jones', 'alice12jones@gmail.com', '$2b$10$jOJcKvoN602Wxjxzs65t2OuQe.Prh7bWU6LL74VrPDV9z8UGFRvOK'),
-('Bob_Gnarly', 'Bob Gnarly', 'bobsnotdead@gmail.com', '$2b$10$BjFEXzmLjQZ608WbahLQ2.k7pQbC0ix8TPfUsRYlRWl.F71cpXhaq'),
-('Chocolate_Charlie', 'Charlie Bucket', 'charlie4210@gmail.com', '$2b$10$lnFT6VcFXiQmNptQfTpX7edfX6UpZHEXf4BLWUE8oupEJbnU9tVgS');
+--DROP TABLE artists;
+CREATE TABLE artists (
+    artist_id SERIAL PRIMARY KEY,
+    artist_name TEXT NOT NULL,
+    bio TEXT 
+);
 
--- Uncomment after initial table creation!
--- DROP TABLE music;
-CREATE TABLE music(
-    song_id VARCHAR(255) PRIMARY KEY,
-    song_title VARCHAR(255),
-    file_link VARCHAR(255),
-    artist_id VARCHAR(255),
-    artist_name VARCHAR(255),
-    album_title VARCHAR(255),
+-- DROP TABLE albums;
+CREATE TABLE ALBUMS (
+    album_id SERIAL PRIMARY KEY,
+    album_title TEXT NOT NULL
+);
+
+-- DROP TABLE songs;
+CREATE TABLE SONGS (
+    song_id SERIAL PRIMARY KEY,
+    song_title TEXT NOT NULL,
+    local_link_ref TEXT NOT NULL,
+    artist_id INT REFERENCES artists(artist_id) NOT NULL,
+    album_id INT REFERENCES albums(album_id) NOT NULL,
     release_date DATE
 );
+
+-- DROP TABLE album_songs;
+CREATE TABLE album_songs (
+    album_id INT REFERENCES albums(album_id) NOT NULL,
+    song_id INT REFERENCES songs(song_id) NOT NULL,
+    track_number INT NOT NULL,
+    PRIMARY KEY (album_id, song_id) 
+);
+
+-- DROP TABLE playlists;
+CREATE TABLE playlists (
+    playlist_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) NOT NULL,
+    playlist_name TEXT NOT NULL
+);
+
+CREATE TABLE playlist_songs (
+    playlist_id INT REFERENCES playlists(playlist_id) NOT NULL,
+    song_id INT REFERENCES songs(song_id) NOT NULL,
+    song_order INT NOT NULL,
+    PRIMARY KEY (playlist_id, song_id)
+);
+
+------------ POPULATE TABLES WITH DATA ------------
+INSERT INTO users (full_name, user_email, password) VALUES
+('Alice Jones', 'alice12jones@gmail.com', '$2b$10$jOJcKvoN602Wxjxzs65t2OuQe.Prh7bWU6LL74VrPDV9z8UGFRvOK'),
+('Bob Gnarly', 'bobsnotdead@gmail.com', '$2b$10$BjFEXzmLjQZ608WbahLQ2.k7pQbC0ix8TPfUsRYlRWl.F71cpXhaq'),
+('Charlie Bucket', 'charlie4210@gmail.com', '$2b$10$lnFT6VcFXiQmNptQfTpX7edfX6UpZHEXf4BLWUE8oupEJbnU9tVgS');
+
+
+-- Debugging
+-- SELECT * FROM users
+-- SELECT * FROM music
+-- SELECT * FROM 
 ```
 
 # Client/Server Folders
