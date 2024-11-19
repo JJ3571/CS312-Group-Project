@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+// Page Components
+import Header from './Header';
+import Sidebar from './Sidebar';
+import Main from './Main';
+import Player from './Player';
 
 const Home = ({ user }) => {
   const [songs, setSongs] = useState([]);
@@ -31,12 +36,21 @@ const Home = ({ user }) => {
     window.location.reload();
   };
 
+  const currentSong = { // test song (this should be replaced with a song fetched from the SQL table)
+    song_title: "Testsong #1",
+    song_id: 1,
+    local_link_ref: "",
+    artist_id: 1,
+    album_id: 1,
+    release_date: 2024
+  };
+
   return (
-    <div>
-      <button onClick={handleLogout}>Logout</button>
-      <h1>Welcome {user ? user.name : 'Guest'}!</h1>
-      <h2>Music Placeholder:</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div id="body">
+      <Header />
+      <Sidebar />
+      <Main />
+      <Player track={currentSong}/>
     </div>
   );
 };

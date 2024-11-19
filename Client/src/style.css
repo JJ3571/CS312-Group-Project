@@ -1,0 +1,230 @@
+@media (min-width: 1024px) { /* desktop */
+    html {
+        font-size: 1.2vw;
+    }
+  }
+  @media (max-width: 768px) { /* mobile*/
+    html {
+        font-size: 2vw;
+    }
+  }
+  
+  :root {
+    /* website color palette */
+    --darkest: #11181C;
+    --darker: rgb(8, 48, 33);
+    --dark: rgb(27, 77, 50);
+    --medium: rgb(34, 123, 50);
+    --light: rgb(71, 168, 54);
+    --lighter: hwb(72 59% 21%);
+    --lightest: rgb(246, 247, 231);
+  }
+  
+  /* fancy scrollbar */
+  ::-webkit-scrollbar {
+    width: 1.2rem;}
+  ::-webkit-scrollbar-track {
+    background-color: var(--darkest);}
+  ::-webkit-scrollbar-thumb {
+    background: var(--dark);
+    border-left: 2px  var(--medium) solid;
+    border-top: 2px var(--medium) solid;
+    border-bottom: 3px var(--darkest) solid;
+    border-right: 3px  var(--darkest) solid;}
+  
+  * {
+    /* initialize margin and padding to 0 for all elements */
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    width: 100%;
+    height: 100%;
+    font-family:Arial, Helvetica, sans-serif;
+  }
+  
+  #body {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--darker);
+    display: grid;
+    grid-template-columns: 15% auto;
+    grid-template-rows: 10% 75% 15%;
+    grid-template-areas:
+    'sidebar header'
+    'sidebar main'
+    'player player';
+  }
+  #header {
+    width: auto;
+    padding: 1rem;
+    background-color: var(--darkest);
+    grid-area: header;
+    color: var(--medium);
+  
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+  }
+  #sidebar {
+    width: auto;
+    background-color: var(--dark);
+    grid-area: sidebar;
+  }
+  
+  /* sidebar navigation */
+  #nav {
+    /* menu items flexbox */
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: baseline;
+  }
+  .button {
+    width: 80%;
+    background: var(--medium);
+    color: var(--lightest);
+    border-radius: 0.5rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    margin: 0.25rem;
+  }
+  .button:hover {
+    background: var(--light);
+    color: var(--darker);
+  }
+  #logo {
+    width: 100%;
+    height: 5rem;
+  }
+  
+  /* main */
+  #main {
+    width: auto;
+    background-color: var(--dark);
+    grid-area: main;
+    margin: 1rem;
+    overflow-y: scroll;
+  }
+  
+  #columnLabels {
+    color: var(--lighter);
+    font-weight: bold;
+  }
+  .trackGrid {
+    width: auto;
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 30% 20% 20% 10% 10% 10%;
+  }
+  .trackGrid * {
+    text-align: center;
+  }
+  .trackGrid .title {
+    text-align:start;
+  }
+  .track {
+    width: 100%;
+    background: var(--medium);
+    color: var(--lightest);
+    margin: 0 0 2px 0;
+  }
+  .track:hover {
+    background: var(--light);
+    color: var(--darker);
+  }
+  #albumHeader {
+    background: var(--dark);
+    padding: 0.5rem;
+    border-bottom: 2px solid var(--darker);
+    display: grid;
+    grid-template-columns: 15% 85%;
+  }
+  #albumHeader h1 {
+    margin-left: 1rem;
+    font-size: 3rem;
+    color:var(--lightest);
+  }
+  #albumHeader h2 {
+    margin-left: 1rem;
+    font-size: 1.5rem;
+    font-weight: 100;
+    color: var(--lighter);
+  }
+  #albumHeader img {
+    max-width: 100%;
+    border-radius: 0.5rem;
+    border: 2px solid var(--lightest);
+  }
+  
+  
+  
+  /* audio player footer thing */
+  #player {
+    width: auto;
+    height: 100%;
+    padding: 0 0.5rem;
+    background-color: var(--darkest);
+    grid-area: player;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  #cover {
+    height: 80%;
+    float: left;
+  }
+  #cover img{
+    max-height: 100%;
+    width: auto;
+    margin: 0;
+    object-fit: fill;
+    border-radius: 0.5rem;
+  }
+  #songinfo {
+    flex: 1;
+    justify-self: flex-start;
+    margin: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #songinfo #title {
+    color: var(--lightest);
+    font-size: 1.4rem;
+  }
+  #songinfo #album, #artist {
+    color: var(--lighter);
+  }
+  #controls {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+  }
+  #back, #forward {
+    background-color: var(--lighter);
+    border-radius: 100%;
+    padding: 0.5rem;
+  }
+  audio::-webkit-media-controls-panel {
+    background-color: var(--lightest);
+    color: var(--lightest);
+  }
+  #rating {
+    margin: 0 1rem;
+  }
+  #ratingForm {
+    text-align: center;
+    color: var(--lighter);
+    display: flex;
+    flex-direction: row;
+  
+  }
+  
