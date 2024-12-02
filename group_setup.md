@@ -22,8 +22,9 @@ Here are some script templates we can use to ensure we all have the same table r
 
 ```pgsql
 ------------ CREATE TABLES ------------
--- Uncomment DROP commands after initial table creation!
--- DROP TABLE users;
+-- Uncomment DROP commands after initial table creation! Used to reset DB for debugging
+--DROP TABLE users, artists, albums, songs, album_songs,playlists, playlist_songs CASCADE;
+
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     user_email TEXT UNIQUE NOT NULL,
@@ -31,20 +32,17 @@ CREATE TABLE users (
     password TEXT NOT NULL 
 );
 
---DROP TABLE artists;
 CREATE TABLE artists (
     artist_id SERIAL PRIMARY KEY,
     artist_name TEXT NOT NULL,
     bio TEXT 
 );
 
--- DROP TABLE albums;
 CREATE TABLE ALBUMS (
     album_id SERIAL PRIMARY KEY,
     album_title TEXT NOT NULL
 );
 
--- DROP TABLE songs;
 CREATE TABLE SONGS (
     song_id SERIAL PRIMARY KEY,
     song_title TEXT NOT NULL,
@@ -54,7 +52,6 @@ CREATE TABLE SONGS (
     release_date DATE
 );
 
--- DROP TABLE album_songs;
 CREATE TABLE album_songs (
     album_id INT REFERENCES albums(album_id) NOT NULL,
     song_id INT REFERENCES songs(song_id) NOT NULL,
@@ -62,7 +59,6 @@ CREATE TABLE album_songs (
     PRIMARY KEY (album_id, song_id) 
 );
 
--- DROP TABLE playlists;
 CREATE TABLE playlists (
     playlist_id SERIAL PRIMARY KEY,
     user_id INT REFERENCES users(user_id) NOT NULL,
