@@ -49,7 +49,7 @@ const Home = ({ user }) => {
   };
 
   return (
-    <div id="body">
+    <div id="homepage-body">
       <Header />
       <Sidebar />
       <Main />

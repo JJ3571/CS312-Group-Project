@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-
 const Signin = ({ setUser }) => {
   const [formData, setFormData] = useState({ user_username: '', password: '' });
   const [error, setError] = useState('');
@@ -43,39 +42,40 @@ const Signin = ({ setUser }) => {
   };
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      <form onSubmit={handleSignin}>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            name="user_username"
-            value={formData.user_username}
-            onChange={handleChange}
-            placeholder="User Name"
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-          />
-        </div>
-        <button type="submit">Sign In</button>
-      </form>
-      <p>
-        Don't have an account?{' '}
-        <button onClick={() => navigate('/signup')}>Sign Up</button>
-
-      </p>
+    <div className="signin-page">
+      <div className="container">
+        <h2>Sign In</h2>
+        <form onSubmit={handleSignin}>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              name="user_username"
+              value={formData.user_username}
+              onChange={handleChange}
+              placeholder="User Name"
+              required
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button type="submit">Sign In</button>
+        </form>
+        <p>
+          Don't have an account?{' '}
+          <button onClick={() => navigate('/signup')}>Sign Up</button>
+        </p>
+      </div>
     </div>
   );
 };
