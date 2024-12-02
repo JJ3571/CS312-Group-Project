@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+
 const Signin = ({ setUser }) => {
-  const [formData, setFormData] = useState({ user_id: '', password: '' });
+  const [formData, setFormData] = useState({ user_username: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -26,7 +27,18 @@ const Signin = ({ setUser }) => {
       }
     } catch (error) {
       console.error('Error signing in:', error);
-      setError('An unexpected error occurred. Please try again.');
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+        setError(error.response.data.message || 'An unexpected error occurred. Please try again.');
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+        setError('No response received from the server. Please try again.');
+      } else {
+        console.error('Error message:', error.message);
+        setError('An unexpected error occurred. Please try again.');
+      }
     }
   };
 
@@ -36,13 +48,13 @@ const Signin = ({ setUser }) => {
       <form onSubmit={handleSignin}>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <div>
-          <label>User ID:</label>
+          <label>Username:</label>
           <input
             type="text"
-            name="user_id"
-            value={formData.user_id}
+            name="user_username"
+            value={formData.user_username}
             onChange={handleChange}
-            placeholder="User ID"
+            placeholder="User Name"
             required
           />
         </div>

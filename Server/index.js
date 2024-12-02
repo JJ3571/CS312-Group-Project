@@ -79,19 +79,19 @@ app.post('/api/logout', (req, res) => {
 
 // Sign up
 app.post("/api/signup", async (req, res) => {
-  const { user_id, user_email, first_name, password } = req.body;
+  const { user_username, user_email, first_name, password } = req.body;
   try {
     const userExists = await pool.query(
-      "SELECT * FROM users WHERE user_id = $1", // update to email rather than username. Have return check for both username/email uniqueness and redirect to sign in page
-      [user_id]
+      "SELECT * FROM users WHERE user_email = $1", // update to email rather than username. Have return check for both username/email uniqueness and redirect to sign in page
+      [user_email]
     );
     if (userExists.rows.length > 0) {
       return res.status(400).json({ message: "Email already taken. Please choose another." });
     }
     const hash = await bcrypt.hash(password, saltRounds);
     await pool.query(
-      "INSERT INTO users (user_id, , user_email, first_name, password) VALUES ($1, $2, $3, $4)",
-      [user_id, user_email, first_name, hash]
+      "INSERT INTO users (user_username, , user_email, first_name, password) VALUES ($1, $2, $3, $4)",
+      [user_username, user_email, first_name, hash]
     );
     res.status(201).json({ message: "Signup successful. Please sign in." });
   } catch (err) {
@@ -102,15 +102,15 @@ app.post("/api/signup", async (req, res) => {
 
 // Sign in
 app.post("/api/signin", async (req, res) => {
-  const { user_id, password } = req.body;
-  console.log("Signin attempt:", { user_id }); // debug testing
+  const { user_username, password } = req.body;
+  console.log("Signin attempt:", { user_username }); // debug testing
   
-  if (!user_id || !password) {
+  if (!user_username || !password) {
     return res.status(400).json({ success: false, message: "User ID and password are required." });
   }
 
   try {
-    const result = await pool.query("SELECT * FROM users WHERE user_id = $1", [user_id]);
+    const result = await pool.query("SELECT * FROM users WHERE user_username = $1", [user_username]);
     
     if (result.rows.length === 0) {
       return res.status(400).json({ success: false, message: "Invalid user ID or password." });
@@ -121,7 +121,8 @@ app.post("/api/signin", async (req, res) => {
     
     if (match) {
       req.session.userId = user.user_id;
-      req.session.name = user.first_name.split(' ')[0];
+      req.session.username = user.user_username;
+      req.session.name = user.full_name.split(' ')[0];
       req.session.email = user.user_email;
       //req.session.preferences = user.preferences; // add preferences to session. Maybe store these preferences in a separate table with user_id as foreign key?
       console.log("Session set:", req.session); // debug testing
@@ -157,47 +158,189 @@ app.get('/api/music', isAuthenticated, async (req, res) => {
   }
 });
 
-// Create new playlist
-app.post('/api/playlists', isAuthenticated, async (req, res) => {
-  const { playlistName } = req.body;
-  const userId = req.session.userId;
-
+// Fetch songs by genre 
+app.get('/api/genre', isAuthenticated, async (req, res) => {
+  const { genre } = req.query;
   try {
     const result = await pool.query(
-      "INSERT INTO playlists (user_id, playlist_name) VALUES ($1, $2) RETURNING *",
-      [userId, playlistName]
+      "SELECT * FROM songs WHERE genre ILIKE $1",
+      [`%${genre}%`]
     );
-    res.json({ success: true, playlist: result.rows[0] });
+    res.json({ success: true, songs: result.rows });
   } catch (err) {
-    console.error('Error creating playlist:', err);
+    console.error('Error fetching songs by genre:', err);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
 
-// Add a song to playlist
-app.post('/api/playlists/:playlistId/songs', isAuthenticated, async (req, res) => {
+// Fetch songs by mood
+app.get('/api/mood', isAuthenticated, async (req, res) => {
+  const { mood } = req.query;
+  try {
+    const result = await pool.query(
+      "SELECT * FROM songs WHERE mood ILIKE $1",
+      [`%${mood}%`]
+    );
+    res.json({ success: true, songs: result.rows });
+  } catch (err) {
+    console.error('Error fetching songs by mood:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// Fetch the user's listening history
+app.get('/api/history', isAuthenticated, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM songs WHERE song_id IN (SELECT song_id FROM user_history WHERE user_id = $1)",
+      [req.session.userId]
+    );
+    res.json({ success: true, history: result.rows });
+  } catch (err) {
+    console.error('Error fetching history:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+
+// Fetch playlists for the current user
+app.get('/api/playlists', isAuthenticated, async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM playlists WHERE user_id = $1", [req.session.userId]);
+    res.json({ success: true, playlists: result.rows });
+  } catch (err) {
+    console.error('Error fetching playlists:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// function to create a playlist 
+//define a post request for the route to playlists within the api
+app.post('/api/playlists', isAuthenticated, async (req,res) => 
+{
+  // define a constant playlist name and set it equal to data sent from client
+  const { playlistName } = req.body;
+
+  // try to create the playlist within the database 
+  try
+  {
+  //insert a new playlist into the "playlists" table
+    const result = await pool.query
+  (
+    "INSERT INTO playlists (playlist_name) VALUES ($1) RETURNING *",
+    [playlistName]
+  );
+  res.json({success: true, playlist: result.rows[0]});
+  }
+  //if an error occurs display an error message 
+  catch(err)
+  {
+    console.error('Error creating the playlist:', err);
+    res.status(500).json({success: false, message: 'Server error.'});
+  }
+});
+  
+  
+// function to add a song to a playlist. 
+app.post('/api/playlists/:playlistId/songs', isAuthenticated, async (req, res) => 
+{
+  //access playlistId and songId from client
   const { playlistId } = req.params;
   const { songId } = req.body;
-
-  try {
-    // Fetch current highest song order for user's playlist
-    const maxOrderResult = await pool.query(
-      "SELECT COALESCE(MAX(song_order), 0) AS max_song_order FROM playlist_songs WHERE playlist_id = $1",
-      [playlistId]
+  
+  try 
+  {
+    // add song to playlist_songs table
+    const result = await pool.query
+    (
+      "INSERT INTO playlist_songs (playlist_id, song_id) VALUES ($1, $2) RETURNING *",
+      [playlistId, songId]
     );
-    const maxSongOrder = maxOrderResult.rows[0].max_song_order;
-
-    // Insert the new song with song_order set to max_song_order + 1
-    const result = await pool.query(
-      "INSERT INTO playlist_songs (playlist_id, song_id, song_order) VALUES ($1, $2, $3) RETURNING *",
-      [playlistId, songId, maxSongOrder + 1]
-    );
-    res.json({ success: true, playlistSong: result.rows[0] });
-  } catch (err) {
+    // return success if task completed successfully 
+    res.json({ success: true, songAdded: result.rows[0] });
+  } 
+  // if not, send an error code
+  catch (err) 
+  {
     console.error('Error adding song to playlist:', err);
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
+  
+  
+//  function to delete a song from a playlist
+app.delete('/api/playlists/:playlistId/songs/:songId', isAuthenticated, async (req, res) => 
+{
+  // access playlistId and songId from client
+  const { playlistId, songId } = req.params;
+  
+  try 
+  {
+    // Remove song from playlist
+      // delete the song from the playlists_songs table
+    const result = await pool.query
+    (
+      "DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING *",
+      [playlistId, songId]
+    );
+
+    // if a row is not affected the song is not in the playlist and return an error code:
+    if (result.rows.length === 0) 
+    {
+      return res.status(404).json({ success: false, message: 'Song not found in this playlist.' });
+    }
+
+    // if the song is removed successfully, express so. 
+    res.json({ success: true, songRemoved: result.rows[0] });
+  } 
+  catch (err) 
+  {
+    // if an error occurs, express so. 
+    console.error('Error removing song from playlist:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+  
+// function to search for a specific song
+app.get('/api/songs/search', async (req, res) => 
+{   
+  const { query } = req.query;  
+  try {
+      const result = await pool.query(
+          "SELECT * FROM songs WHERE song_title ILIKE $1 OR artist_name ILIKE $1",
+          [`%${query}%`]
+      );
+      
+      res.json({ success: true, songs: result.rows });
+  } catch (err) {
+      console.error('Error searching for songs:', err);
+      res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+  
+  
+app.post('/api/songs/:songId/feedback', async (req, res) => 
+  {
+      const { songId } = req.params;
+      const { feedback, user_id } = req.body; 
+
+
+      try 
+      {
+          const result = await pool.query
+          (
+              "INSERT INTO song_feedback (song_id, feedback, user_id) VALUES ($1, $2, $3) RETURNING *", 
+          [songId, feedback, userID]
+          );
+
+          res.json({ success: true, feedbackGiven: result.rows[0] });
+      } 
+      catch (err) 
+      {
+          console.error('Error submitting feedback:', err);
+          res.status(500).json({ success: false, message: 'Server error.' });
+      }
+  });
 
 // Start server
 app.listen(port, () => {

@@ -36,6 +36,9 @@ const Home = ({ user }) => {
     window.location.reload();
   };
 
+  // const to replace current song with after DB is updated:
+  // const currentSong = songs.length > 0 ? songs[0] : null;
+
   const currentSong = { // test song (this should be replaced with a song fetched from the SQL table)
     song_title: "Testsong #1",
     song_id: 1,
