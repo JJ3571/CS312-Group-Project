@@ -30,44 +30,48 @@ const Signup = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
-      <div>
-        <label>User ID:</label>
-        <input
-          type="text"
-          name="user_id"
-          value={formData.user_id}
-          onChange={handleChange}
-          placeholder="User ID"
-          required
-        />
+    <div className="signin-page">
+      <div className="container">
+        <form onSubmit={handleSubmit}>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {success && <p style={{ color: 'green' }}>{success}</p>}
+          <div>
+            <label>User ID:</label>
+            <input
+              type="text"
+              name="user_id"
+              value={formData.user_id}
+              onChange={handleChange}
+              placeholder="User ID"
+              required
+            />
+          </div>
+          <div>
+            <label>Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Name"
+              required
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
       </div>
-      <div>
-        <label>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Name"
-          required
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-          required
-        />
-      </div>
-      <button type="submit">Sign Up</button>
-    </form>
+    </div>
   );
 };
 
