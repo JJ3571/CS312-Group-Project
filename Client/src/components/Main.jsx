@@ -1,96 +1,27 @@
-import Playlist from './Playlist';
+import React from 'react';
+import PropTypes from 'prop-types';
+import '../style.css';
 
-const testAlbum = { // This is just a test 
-    albumTitle: "Album Name",
-    albumArtist: "Prestune",
-    releaseDate: "January 1, 2010",
-    albumCover: "./profilepic.png",
-    tracks: [
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    },
-    {
-        title: "Track 1",
-        album: "AlbumName",
-        artist: "Prestune",
-        time: "03:00",
-        rating: "5.0"
-    }]
+const Main = ({ songs, setCurrentSong }) => {
+  console.log('Songs:', songs);
+
+  return (
+    <div id="main-content">
+      <h1>Available Songs</h1>
+      <ul>
+        {songs.map((song) => (
+          <li key={song.song_id} onClick={() => setCurrentSong(song)}>
+            {song.song_title} by {song.artist_name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-function Main () {
-    return (
-        <section id="main">
-            <Playlist album={testAlbum}/>
-        </section>
-    );
-}
+Main.propTypes = {
+  songs: PropTypes.array.isRequired,
+  setCurrentSong: PropTypes.func.isRequired,
+};
 
 export default Main;

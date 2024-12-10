@@ -73,11 +73,34 @@ CREATE TABLE playlist_songs (
 );
 
 ------------ POPULATE TABLES WITH DATA ------------
-INSERT INTO users (full_name, user_email, password) VALUES
-('Alice Jones', 'alice12jones@gmail.com', '$2b$10$jOJcKvoN602Wxjxzs65t2OuQe.Prh7bWU6LL74VrPDV9z8UGFRvOK'),
-('Bob Gnarly', 'bobsnotdead@gmail.com', '$2b$10$BjFEXzmLjQZ608WbahLQ2.k7pQbC0ix8TPfUsRYlRWl.F71cpXhaq'),
-('Charlie Bucket', 'charlie4210@gmail.com', '$2b$10$lnFT6VcFXiQmNptQfTpX7edfX6UpZHEXf4BLWUE8oupEJbnU9tVgS');
+INSERT INTO users (user_username, full_name, user_email, password) VALUES
+('Alice_FTW', 'Alice Jones', 'alice12jones@gmail.com', '$2b$10$jOJcKvoN602Wxjxzs65t2OuQe.Prh7bWU6LL74VrPDV9z8UGFRvOK'),
+('B0BGnarly','Bob Gnarly', 'bobsnotdead@gmail.com', '$2b$10$BjFEXzmLjQZ608WbahLQ2.k7pQbC0ix8TPfUsRYlRWl.F71cpXhaq'),
+('Choco Charlie', 'Charlie Bucket', 'charlie4210@gmail.com', '$2b$10$lnFT6VcFXiQmNptQfTpX7edfX6UpZHEXf4BLWUE8oupEJbnU9tVgS');
 
+
+INSERT INTO artists (artist_name, bio) VALUES
+('Egzod', 'Nils Oskampis a music producer and DJ who was born in Portugal, raised in France, and is currently based in the United States. He has garnered over 600 million streams across platforms since 2017. The name Egzod derives from the French word “Exodus,” embodying a captivating story of a collective departure of humanity through a portal to a world that transcends known reality.'),
+('ROY KNOX', 'Roy Levi, known by his stage name ROY KNOX, formerly ROY, is an artist who debuted on NCS with his track, About Me, in collaboration with Koven, released on June 8, 2019.'),
+('NEFFEX', 'Bryce Savage (born Brandon Christopher Horth) is a music producer and singer-songwriter. He is the lead singer, writer, and current producer of NEFFEX. He also releases music under his own name, Bryce Savage.'),
+('AIWA', 'THIRST is a drift phonk group existing of ROY KNOX, hayve and Bad Computer. Established in 2022, THIRST frequently releases in Monstercat Uncaged and Magic Records.'),
+('Warriyo', 'Yannis Leigsnering aka Warriyo is a 21 year-old EDM producer, who currently lives in Belgium.
+
+Born in Germany on April 22nd 1994 and raised in Belgium, he started producing music at the age of 14. His style can be defined by a mixture of different genres such as dubstep, drum & bass, electro, house and more.');
+
+INSERT INTO albums (album_title) VALUES
+('Album 1'),
+('Album 2'),
+('Album 3'),
+('Album 4'),
+('Album 5');
+
+INSERT INTO songs (song_title, local_link_ref, artist_id, album_id, release_date) VALUES
+('Royalty', '/music/Royalty.mp3', 1, 1, '2021-04-22'),
+('Poison', '/music/Your_Poison.mp3', 2, 2, '2024-10-10'),
+('Desperate', '/music/Desperate.mp3', 3, 3, '2024-09-25'),
+('AIWA', '/music/AIWA.mp3', 4, 4, '2024-10-24'),
+('Mortals', '/music/Mortals.mp3', 5, 5, '2016-12-15');
 
 -- Debugging
 -- SELECT * FROM users

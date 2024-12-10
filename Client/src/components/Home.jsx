@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 // Page Components
@@ -10,6 +9,7 @@ import Player from './Player';
 
 const Home = ({ user }) => {
   const [songs, setSongs] = useState([]);
+  const [currentSong, setCurrentSong] = useState(null);
   const [error, setError] = useState('');
 
   const fetchSongs = async () => {
@@ -20,6 +20,9 @@ const Home = ({ user }) => {
         setError(response.data.message || 'Failed to fetch songs.');
       } else {
         setSongs(response.data.songs);
+        if (response.data.songs.length > 0) {
+          setCurrentSong(response.data.songs[0]); // Set the first song as the current song
+        }
       }
     } catch (err) {
       console.error('Error fetching songs:', err);
@@ -36,24 +39,15 @@ const Home = ({ user }) => {
     window.location.reload();
   };
 
-  // const to replace current song with after DB is updated:
-  // const currentSong = songs.length > 0 ? songs[0] : null;
-
-  const currentSong = { // test song (this should be replaced with a song fetched from the SQL table)
-    song_title: "Testsong #1",
-    song_id: 1,
-    local_link_ref: "",
-    artist_id: 1,
-    album_id: 1,
-    release_date: 2024
-  };
+  console.log('Current Song:', currentSong);
 
   return (
     <div id="homepage-body">
       <Header />
       <Sidebar />
-      <Main />
-      <Player track={currentSong}/>
+      <Main songs={songs} setCurrentSong={setCurrentSong} />
+      {currentSong && <Player track={currentSong} />}
+      {error && <div className="error">{error}</div>}
     </div>
   );
 };

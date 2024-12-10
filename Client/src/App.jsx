@@ -35,6 +35,8 @@ const App = () => {
     fetchCurrentUser();
   }, []);
 
+  console.log('User:', user);
+
   return (
     <Router>
       <Routes>

@@ -21,6 +21,7 @@ const saltRounds = 10;
 // --- Middlewares ---
 const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.static(__dirname + '/public'));
+app.use('/music', express.static(__dirname + '/Server/NCS_Music')); // Added to serve music files!
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
@@ -150,7 +151,7 @@ app.get('/api/currentUser', (req, res) => {
 // Routes for fetching music data and returning it to client based on potential filters or user preferences
 app.get('/api/music', isAuthenticated, async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM music");
+    const result = await pool.query("SELECT * FROM songs");
     res.json({ success: true, songs: result.rows });
   } catch (err) {
     console.error('Error fetching music:', err);
